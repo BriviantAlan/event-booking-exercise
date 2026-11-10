@@ -26,7 +26,7 @@ We care more about correct, readable code than about finishing everything.
 ### Run it
 
 ```bash
-git clone <this-repo-url> event-booking-exercise
+git clone https://github.com/BriviantAlan/event-booking-exercise.git
 cd event-booking-exercise
 docker compose up --build
 ```
