@@ -1,0 +1,22 @@
+{
+  "name": "event-booking-exercise",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Backend interview exercise: Event Booking API with MySQL",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test --test-concurrency=1 --test-timeout=20000 test/*.test.js",
+    "test:part1": "node --test --test-timeout=20000 test/part1-events.test.js",
+    "test:part2": "node --test --test-timeout=20000 test/part2-bookings.test.js",
+    "test:part3": "node --test --test-timeout=20000 test/part3-manage-bookings.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "mysql2": "^3.14.0"
+  }
+}

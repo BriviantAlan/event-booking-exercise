@@ -1,0 +1,45 @@
+services:
+  db:
+    image: mysql:8.4
+    command: ["--default-time-zone=+00:00"]
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: interview
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+    ports:
+      - "${DB_HOST_PORT:-3307}:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./db/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+    healthcheck:
+      # Uses TCP, which only comes up after schema.sql and seed.sql have loaded.
+      test: ["CMD", "mysql", "-h127.0.0.1", "-uapp", "-papp", "-e", "SELECT 1"]
+      interval: 2s
+      timeout: 5s
+      retries: 60
+      start_period: 10s
+
+  api:
+    build: .
+    init: true
+    ports:
+      - "${API_PORT:-3000}:3000"
+    environment:
+      PORT: 3000
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: app
+      DB_PASSWORD: app
+      DB_NAME: interview
+    volumes:
+      # Live-mount your code so edits apply without a rebuild.
+      - ./src:/app/src
+      - ./test:/app/test
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db-data:
